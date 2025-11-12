@@ -1,9 +1,10 @@
+// /src/components/Gallery.tsx
 import { useState, useRef, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const beforeAfterCards = [
-  { image: '/img/before-after1.jpg', label: 'Before & After #1' },
-  { image: '/img/before-after2.jpg', label: 'Before & After #2' }
+  { image: '/img/before-after1.jpg', label: 'Before & After #1', objectPos: 'center top' },   // левый — тянем к верху
+  { image: '/img/before-after2.jpg', label: 'Before & After #2', objectPos: 'center center' } // правый — по центру
 ];
 
 const workImages = [
@@ -24,15 +25,10 @@ export default function Gallery() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setItemsVisible(1);
-      } else if (window.innerWidth < 1024) {
-        setItemsVisible(2);
-      } else {
-        setItemsVisible(3);
-      }
+      if (window.innerWidth < 768) setItemsVisible(1);
+      else if (window.innerWidth < 1024) setItemsVisible(2);
+      else setItemsVisible(3);
     };
-
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -43,31 +39,23 @@ export default function Gallery() {
   };
 
   const prevSlide = () => {
-    setCarouselIndex((prev) => (prev - 1 + Math.max(1, workImages.length - itemsVisible + 1)) % Math.max(1, workImages.length - itemsVisible + 1));
-  };
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (lightboxImage) {
-      if (e.key === 'Escape') {
-        setLightboxImage(null);
-      }
-    }
+    const len = Math.max(1, workImages.length - itemsVisible + 1);
+    setCarouselIndex((prev) => (prev - 1 + len) % len);
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    const onKey = (e: KeyboardEvent) => {
+      if (!lightboxImage) return;
+      if (e.key === 'Escape') setLightboxImage(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [lightboxImage]);
 
-  const scrollCarousel = () => {
-    if (carouselRef.current) {
-      const itemWidth = carouselRef.current.scrollWidth / workImages.length;
-      carouselRef.current.scrollLeft = carouselIndex * itemWidth;
-    }
-  };
-
   useEffect(() => {
-    scrollCarousel();
+    if (!carouselRef.current) return;
+    const itemWidth = carouselRef.current.scrollWidth / workImages.length;
+    carouselRef.current.scrollLeft = carouselIndex * itemWidth;
   }, [carouselIndex]);
 
   return (
@@ -75,12 +63,8 @@ export default function Gallery() {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Before & After
-            </h2>
-            <p className="text-xl text-gray-400">
-              See the transformation
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Before & After</h2>
+            <p className="text-xl text-gray-400">See the transformation</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-20">
@@ -92,45 +76,40 @@ export default function Gallery() {
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={card.image}
-                    alt={`${card.label} - paint correction and scratch removal results in Bucks County`}
+                    alt={`${card.label}: paint correction & scratch removal results in Bucks County / Philadelphia / NJ`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                    style={{ objectPosition: card.objectPos as any }}
                     loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     onClick={() => setLightboxImage(card.image)}
                   />
                 </div>
                 <div className="p-5 bg-gray-800/70">
-                  <p className="text-white font-semibold text-center text-lg">
-                    {card.label}
-                  </p>
+                  <p className="text-white font-semibold text-center text-lg">{card.label}</p>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="mb-12">
-            <h3 className="text-3xl font-bold text-white mb-2 text-center">
-              Our Work
-            </h3>
-            <p className="text-gray-400 text-center mb-8">
-              Recent projects
-            </p>
+            <h3 className="text-3xl font-bold text-white mb-2 text-center">Our Work</h3>
+            <p className="text-gray-400 text-center mb-8">Recent projects</p>
 
             <div className="relative">
               <div
                 ref={carouselRef}
                 className="flex gap-4 overflow-x-auto scroll-smooth pb-4 md:pb-0"
                 style={{ scrollBehavior: 'smooth' }}
+                aria-label="Work gallery carousel"
               >
                 {workImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3"
-                  >
+                  <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
                     <img
                       src={image}
-                      alt={`Paint correction work - work${index + 1}`}
+                      alt={`Paint correction work sample #${index + 1}`}
                       className="w-full h-64 object-cover rounded-xl shadow-xl cursor-pointer hover:opacity-90 transition-opacity"
                       loading="lazy"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       onClick={() => setLightboxImage(image)}
                     />
                   </div>
@@ -174,6 +153,9 @@ export default function Gallery() {
         <div
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
           onClick={() => setLightboxImage(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image preview"
         >
           <button
             className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
@@ -184,7 +166,7 @@ export default function Gallery() {
           </button>
           <img
             src={lightboxImage}
-            alt="Enlarged view"
+            alt="Enlarged work sample"
             className="max-w-full max-h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />
