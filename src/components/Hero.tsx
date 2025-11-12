@@ -30,40 +30,18 @@ export default function Hero() {
         <div className="max-w-4xl mx-auto text-center">
           {/* Заголовок */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            <span
-              style={{
-                color: red,
-                textShadow: '0 0 14px rgba(255, 39, 56, 0.45)',
-              }}
-            >
-              Mobile
-            </span>{' '}
-            <span
-              className="text-yellow-300"
-              style={{
-                textShadow: '0 0 12px rgba(250, 204, 21, 0.4)',
-              }}
-            >
-              Paint Correction
-            </span>{' '}
-            &amp;{' '}
-            <span
-              className="text-yellow-300"
-              style={{
-                textShadow: '0 0 12px rgba(250, 204, 21, 0.4)',
-              }}
-            >
-              Scratch Removal
-            </span>
+            <span style={{ color: red }}>Mobile</span>{' '}
+            <span className="text-yellow-300">Paint Correction</span>{' '}
+            <span style={{ color: red }}>&amp;</span>{' '}
+            <span className="text-yellow-300">Scratch Removal</span>
           </h1>
 
-          {/* Подзаголовок: & белый, Mobile Service красный */}
+          {/* Подзаголовок: всё белое, без красного Mobile Service */}
           <p className="text-lg md:text-xl text-gray-100 mb-4">
-            Scratch Removal • Paint Correction &{' '}
-            <span style={{ color: red }}>Mobile Service</span> — We Come to You
+            Scratch Removal • Paint Correction &amp; Mobile Service — We Come to You
           </p>
 
-          {/* Две строки, как просил Андрей – одинаково на мобиле и на десктопе */}
+          {/* Две строки, как просил Андрей */}
           <p className="text-base md:text-lg text-gray-100">
             Located in Doylestown, PA 18901
           </p>
@@ -82,7 +60,7 @@ export default function Hero() {
               Call 267-379-3167
             </a>
 
-            {/* Schedule Appointment – красная кнопка, слабое свечение */}
+            {/* Schedule Appointment – красная кнопка */}
             <button
               onClick={scrollToAppointment}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-black"
