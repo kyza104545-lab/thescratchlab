@@ -87,19 +87,19 @@ export default function Gallery() {
             {beforeAfterCards.map((card, index) => (
               <div
                 key={index}
-                className="group bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.2)]"
+                className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all border-2 border-white/10"
               >
-                <div className="aspect-video overflow-hidden">
+                <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={card.image}
-                    alt={card.label}
+                    alt={`${card.label} - paint correction and scratch removal results in Bucks County`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
                     loading="lazy"
                     onClick={() => setLightboxImage(card.image)}
                   />
                 </div>
-                <div className="p-4">
-                  <p className="text-white font-semibold text-center">
+                <div className="p-5 bg-gray-800/70">
+                  <p className="text-white font-semibold text-center text-lg">
                     {card.label}
                   </p>
                 </div>

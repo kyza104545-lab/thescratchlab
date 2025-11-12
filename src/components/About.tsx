@@ -10,13 +10,13 @@ export default function About() {
 
             <div className="space-y-4 text-lg text-gray-300 leading-relaxed">
               <p>
-                At The Scratch Lab, we bring paint restoration directly to you.
+                At The Scratch Lab, we bring professional paint correction and scratch removal directly to your location in Bucks County, Philadelphia, and New Jersey.
               </p>
               <p>
-                Our Mobile Service allows you to get the best results right at home — no need to drive anywhere.
+                Our mobile service allows you to get the best results right at home — no need to drive anywhere. We come to you with all professional equipment and materials.
               </p>
               <p>
-                We use top materials and proven methods to bring back a clean, shiny finish to your vehicle's paint.
+                Whether you need scratch removal in Doylestown, paint correction in Philadelphia, or ceramic coating in Bucks County, we use premium materials and proven methods to restore your vehicle's finish.
               </p>
             </div>
           </div>

@@ -40,10 +40,10 @@ export default function Services() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Our Services
+              Serving Bucks County, Philadelphia & New Jersey
             </h2>
             <p className="text-xl text-gray-400">
-              Professional paint restoration at your location
+              Professional mobile paint restoration at your location
             </p>
           </div>
 
