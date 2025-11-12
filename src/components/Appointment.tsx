@@ -1,3 +1,4 @@
+// /src/components/Appointment.tsx
 import { useState, FormEvent } from 'react';
 import { Calendar, Upload, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -23,13 +24,8 @@ export default function Appointment() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
-    if (!formData.car.trim()) {
-      newErrors.car = 'Car make/model is required';
-    }
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.car.trim()) newErrors.car = 'Car make/model is required';
 
     if (!formData.zip.trim()) {
       newErrors.zip = 'ZIP code is required';
@@ -45,8 +41,13 @@ export default function Appointment() {
     const selectedFiles = Array.from(e.target.files || []);
 
     const validFiles = selectedFiles.filter(file => {
-      const isValidType = ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type);
-      const isValidSize = file.size <= 10 * 1024 * 1024;
+      const isValidType = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/webp',
+      ].includes(file.type);
+      const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB
       return isValidType && isValidSize;
     });
 
@@ -63,12 +64,17 @@ export default function Appointment() {
     setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
+  const dataUrlFromFile = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(String(reader.result));
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
     setSubmitStatus('idle');
@@ -76,24 +82,14 @@ export default function Appointment() {
 
     try {
       const photoUrls: string[] = [];
-
       for (const file of files) {
-        const reader = new FileReader();
-        const base64 = await new Promise<string>((resolve) => {
-          reader.onloadend = () => {
-            const result = reader.result as string;
-            resolve(result);
-          };
-          reader.readAsDataURL(file);
-        });
+        const base64 = await dataUrlFromFile(file);
         photoUrls.push(base64);
       }
 
-      const response = await fetch('/.netlify/functions/submit', {
+      const res = await fetch('/.netlify/functions/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
           car: formData.car,
@@ -103,15 +99,13 @@ export default function Appointment() {
         })
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit request');
-      }
+      if (!res.ok) throw new Error('Failed to submit request');
 
       setSubmitStatus('success');
       setFormData({ name: '', car: '', zip: '', message: '' });
       setFiles([]);
-    } catch (error) {
-      console.error('Submit error:', error);
+    } catch (err) {
+      console.error('Submit error:', err);
       setSubmitStatus('error');
       setErrorMessage('Failed to submit your request. Please try again or call us directly.');
     } finally {
@@ -127,9 +121,7 @@ export default function Appointment() {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 rounded-full mb-6">
               <CheckCircle2 className="w-10 h-10 text-green-400" />
             </div>
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Thank You!
-            </h2>
+            <h2 className="text-4xl font-bold text-white mb-4">Thank You!</h2>
             <p className="text-xl text-gray-300 mb-6">
               We received your appointment request and will contact you shortly.
             </p>
@@ -223,7 +215,7 @@ export default function Appointment() {
                   <input
                     type="file"
                     id="photos"
-                    accept=".jpg,.jpeg,.png"
+                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                     multiple
                     onChange={handleFileChange}
                     disabled={files.length >= 5}
@@ -235,7 +227,7 @@ export default function Appointment() {
                   >
                     <Upload className="w-6 h-6 text-gray-400" />
                     <span className="text-gray-400">
-                      {files.length >= 5 ? 'Maximum files reached' : 'Click to upload photos (JPG, PNG, max 10MB each)'}
+                      {files.length >= 5 ? 'Maximum files reached' : 'Click to upload photos (JPG, PNG, WEBP, max 10MB each)'}
                     </span>
                   </label>
                 </div>
