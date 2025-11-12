@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://thescratchlab.com/sitemap.xml
+Sitemap: https://scratchlab.org/sitemap.xml
