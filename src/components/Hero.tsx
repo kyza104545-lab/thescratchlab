@@ -32,7 +32,7 @@ export default function Hero() {
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
             <span style={{ color: red }}>Mobile</span>{' '}
             <span className="text-yellow-300">Paint Correction</span>{' '}
-            <span className="text-white">&amp;</span>{' '}
+            <span style={{ color: red }}>&amp;</span>{' '}
             <span className="text-yellow-300">Scratch Removal</span>
           </h1>
 
