@@ -1,3 +1,4 @@
+// src/components/Header.tsx
 import { useState } from 'react';
 import { Menu, X, Phone, Instagram, Facebook } from 'lucide-react';
 
@@ -31,6 +32,7 @@ export default function Header() {
             </div>
           </div>
 
+          {/* Desktop навигация */}
           <nav className="hidden lg:flex items-center gap-8">
             <button
               onClick={() => scrollToSection('services')}
@@ -55,6 +57,12 @@ export default function Header() {
               className="text-gray-300 hover:text-white transition-colors"
             >
               Why Us
+            </button>
+            <button
+              onClick={() => scrollToSection('reviews')}
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              Reviews
             </button>
             <button
               onClick={() => scrollToSection('contact')}
@@ -92,6 +100,7 @@ export default function Header() {
             </div>
           </nav>
 
+          {/* Mobile: call + burger */}
           <div className="lg:hidden flex items-center gap-4">
             <a
               href="tel:+12673793167"
@@ -110,6 +119,7 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Mobile меню */}
         {isMenuOpen && (
           <div className="lg:hidden pb-4 border-t border-gray-800 mt-2">
             <nav className="flex flex-col gap-4 pt-4">
@@ -136,6 +146,12 @@ export default function Header() {
                 className="text-gray-300 hover:text-white transition-colors text-left"
               >
                 Why Us
+              </button>
+              <button
+                onClick={() => scrollToSection('reviews')}
+                className="text-gray-300 hover:text-white transition-colors text-left"
+              >
+                Reviews
               </button>
               <button
                 onClick={() => scrollToSection('contact')}
