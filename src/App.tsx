@@ -1,3 +1,4 @@
+// src/App.tsx
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -9,6 +10,7 @@ import WhyUs from './components/WhyUs';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import MobileCallButton from './components/MobileCallButton';
+import Reviews from './components/Reviews';
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
       <Process />
       <WhyUs />
       <Appointment />
+      <Reviews />
       <Contact />
       <Footer />
       <MobileCallButton />
