@@ -36,28 +36,27 @@ export default function Appointment() {
 
   const handleFileChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(ev.target.files || []);
+
+    // только картинки и максимум 10 МБ на файл (ограничение Телеги)
     const valid = selected.filter(
-      (f) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(f.type) && f.size <= 10 * 1024 * 1024
+      (f) =>
+        ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(f.type) &&
+        f.size <= 10 * 1024 * 1024
     );
+
     if (valid.length + files.length > 5) {
       setErrorMessage('Maximum 5 photos allowed');
       return;
     }
+
     setFiles((p) => [...p, ...valid].slice(0, 5));
     setErrorMessage('');
   };
 
   const removeFile = (i: number) => setFiles((p) => p.filter((_, idx) => idx !== i));
 
-  const fileToDataUrl = (file: File) =>
-    new Promise<string>((resolve, reject) => {
-      const r = new FileReader();
-      r.onloadend = () => resolve(String(r.result));
-      r.onerror = reject;
-      r.readAsDataURL(file);
-    });
-
-  const handleSubmit = async (e: FormEvent) => {
+  // 🔴 ВАЖНО: этот submit теперь шлёт всё сразу в n8n, а не в Netlify
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -66,23 +65,28 @@ export default function Appointment() {
     setErrorMessage('');
 
     try {
-      const photoUrls: string[] = [];
-      for (const f of files) photoUrls.push(await fileToDataUrl(f));
+      const fd = new FormData();
+      fd.append('name', formData.name);
+      fd.append('email', formData.email);
+      fd.append('phone', formData.phone);
+      fd.append('car', formData.car);
+      fd.append('zip', formData.zip);
+      fd.append('message', formData.message);
 
-      const res = await fetch('/.netlify/functions/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          car: formData.car,
-          zip: formData.zip,
-          message: formData.message,
-          photoUrls,
-        }),
+      // до 5 файлов, каждый максимум 10 МБ
+      files.forEach((file) => {
+        fd.append('photos', file);
       });
-      if (!res.ok) throw new Error('Submit failed');
+
+      const res = await fetch('https://n8n.vladkuzmenkoai.com/webhook/thescratchlab', {
+        method: 'POST',
+        body: fd, // НИКАКИХ headers — браузер сам проставит multipart boundary
+      });
+
+      if (!res.ok) {
+        console.error(await res.text());
+        throw new Error('Submit failed');
+      }
 
       setSubmitStatus('success');
       setFormData({ name: '', email: '', phone: '', car: '', zip: '', message: '' });
@@ -105,14 +109,19 @@ export default function Appointment() {
               <CheckCircle2 className="w-10 h-10 text-green-400" />
             </div>
             <h2 className="text-4xl font-bold text-white mb-4">Thank You!</h2>
-            <p className="text-xl text-gray-300 mb-6">We received your appointment request and will contact you shortly.</p>
+            <p className="text-xl text-gray-300 mb-6">
+              We received your appointment request and will contact you shortly.
+            </p>
             <p className="text-gray-400 mb-8">
               Need immediate assistance? Call us at{' '}
               <a href="tel:+12673793167" className="text-blue-400 hover:text-blue-300">
                 267-379-3167
               </a>
             </p>
-            <button onClick={() => setSubmitStatus('idle')} className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
+            <button
+              onClick={() => setSubmitStatus('idle')}
+              className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
               Submit Another Request
             </button>
           </div>
@@ -130,22 +139,73 @@ export default function Appointment() {
               <Calendar className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Schedule Your Appointment</h2>
-            <p className="text-xl text-gray-400">Get a quick estimate — upload photos, tell us your ZIP and car details.</p>
+            <p className="text-xl text-gray-400">
+              Get a quick estimate — upload photos, tell us your ZIP and car details.
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-10">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 md:p-10"
+          >
             <div className="space-y-6">
-              <Field id="name" label="Full Name" required value={formData.name} onChange={(v) => setFormData({ ...formData, name: v })} error={errors.name} placeholder="John Doe" />
-              <Field id="email" label="Email" required value={formData.email} onChange={(v) => setFormData({ ...formData, email: v })} error={errors.email} placeholder="john@example.com" type="email" />
-              <Field id="phone" label="Phone" required value={formData.phone} onChange={(v) => setFormData({ ...formData, phone: v })} error={errors.phone} placeholder="+1 267 379 3167" type="tel" />
-              <Field id="car" label="Car Make / Model" required value={formData.car} onChange={(v) => setFormData({ ...formData, car: v })} error={errors.car} placeholder="e.g., Tesla Model 3, BMW X5" />
-              <Field id="zip" label="ZIP Code" required value={formData.zip} onChange={(v) => setFormData({ ...formData, zip: v })} error={errors.zip} placeholder="18901" pattern="^\d{5}(-\d{4})?$" />
+              <Field
+                id="name"
+                label="Full Name"
+                required
+                value={formData.name}
+                onChange={(v) => setFormData({ ...formData, name: v })}
+                error={errors.name}
+                placeholder="John Doe"
+              />
+              <Field
+                id="email"
+                label="Email"
+                required
+                value={formData.email}
+                onChange={(v) => setFormData({ ...formData, email: v })}
+                error={errors.email}
+                placeholder="john@example.com"
+                type="email"
+              />
+              <Field
+                id="phone"
+                label="Phone"
+                required
+                value={formData.phone}
+                onChange={(v) => setFormData({ ...formData, phone: v })}
+                error={errors.phone}
+                placeholder="+1 267 379 3167"
+                type="tel"
+              />
+              <Field
+                id="car"
+                label="Car Make / Model"
+                required
+                value={formData.car}
+                onChange={(v) => setFormData({ ...formData, car: v })}
+                error={errors.car}
+                placeholder="e.g., Tesla Model 3, BMW X5"
+              />
+              <Field
+                id="zip"
+                label="ZIP Code"
+                required
+                value={formData.zip}
+                onChange={(v) => setFormData({ ...formData, zip: v })}
+                error={errors.zip}
+                placeholder="18901"
+                pattern="^\d{5}(-\d{4})?$"
+              />
 
               <div>
-                <label htmlFor="photos" className="block text-white font-medium mb-2">Upload Photos (up to 5)</label>
+                <label htmlFor="photos" className="block text-white font-medium mb-2">
+                  Upload Photos (up to 5)
+                </label>
                 <div className="relative">
                   <input
                     id="photos"
+                    name="photos"
                     type="file"
                     accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                     multiple
@@ -156,12 +216,16 @@ export default function Appointment() {
                   <label
                     htmlFor="photos"
                     className={`flex items-center justify-center gap-2 w-full px-4 py-8 bg-gray-900 border-2 border-dashed ${
-                      files.length >= 5 ? 'border-gray-700 cursor-not-allowed' : 'border-gray-600 cursor-pointer hover:border-blue-500'
+                      files.length >= 5
+                        ? 'border-gray-700 cursor-not-allowed'
+                        : 'border-gray-600 cursor-pointer hover:border-blue-500'
                     } rounded-lg transition-colors`}
                   >
                     <Upload className="w-6 h-6 text-gray-400" />
                     <span className="text-gray-400">
-                      {files.length >= 5 ? 'Maximum files reached' : 'Click to upload photos (JPG, PNG, WEBP, max 10MB each)'}
+                      {files.length >= 5
+                        ? 'Maximum files reached'
+                        : 'Click to upload photos (JPG, PNG, WEBP, max 10MB each)'}
                     </span>
                   </label>
                 </div>
@@ -170,7 +234,11 @@ export default function Appointment() {
                     {files.map((f, i) => (
                       <div key={i} className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
                         <span className="text-sm text-gray-300 truncate flex-1">{f.name}</span>
-                        <button type="button" onClick={() => removeFile(i)} className="ml-2 text-red-400 hover:text-red-300 transition-colors">
+                        <button
+                          type="button"
+                          onClick={() => removeFile(i)}
+                          className="ml-2 text-red-400 hover:text-red-300 transition-colors"
+                        >
                           Remove
                         </button>
                       </div>
@@ -180,7 +248,9 @@ export default function Appointment() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-white font-medium mb-2">Short Description</label>
+                <label htmlFor="message" className="block text-white font-medium mb-2">
+                  Short Description
+                </label>
                 <textarea
                   id="message"
                   rows={4}
@@ -203,14 +273,23 @@ export default function Appointment() {
                 disabled={isSubmitting}
                 className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {isSubmitting ? (<><Loader2 className="w-5 h-5 animate-spin" /> Sending Request...</>) : ('Send Request')}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Sending Request...
+                  </>
+                ) : (
+                  'Send Request'
+                )}
               </button>
             </div>
           </form>
 
           <p className="text-center text-gray-400 mt-8">
             Prefer to call? Reach us at{' '}
-            <a href="tel:+12673793167" className="text-blue-400 hover:text-blue-300 font-medium">267-379-3167</a>
+            <a href="tel:+12673793167" className="text-blue-400 hover:text-blue-300 font-medium">
+              267-379-3167
+            </a>
           </p>
         </div>
       </div>
@@ -219,10 +298,25 @@ export default function Appointment() {
 }
 
 function Field({
-  id, label, value, onChange, placeholder, error, required, type = 'text', pattern,
+  id,
+  label,
+  value,
+  onChange,
+  placeholder,
+  error,
+  required,
+  type = 'text',
+  pattern,
 }: {
-  id: string; label: string; value: string; onChange: (v: string) => void;
-  placeholder?: string; error?: string; required?: boolean; type?: string; pattern?: string;
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  error?: string;
+  required?: boolean;
+  type?: string;
+  pattern?: string;
 }) {
   return (
     <div>
@@ -235,7 +329,9 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         pattern={pattern}
-        className={`w-full px-4 py-3 bg-gray-900 border ${error ? 'border-red-500' : 'border-gray-600'} rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors`}
+        className={`w-full px-4 py-3 bg-gray-900 border ${
+          error ? 'border-red-500' : 'border-gray-600'
+        } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors`}
         placeholder={placeholder}
       />
       {error && <p className="mt-1 text-sm text-red-400">{error}</p>}
