@@ -16,7 +16,7 @@ async function handleScratchLabSubmit(event) {
   }
 
   try {
-    const res = await fetch('https://n8n.vladkuzmenkoai.com/webhook/thescratchlab', {
+    const res = await fetch('https://n8n.vladkuzmenko.com/webhook/thescratchlab', {
       method: 'POST',
       body: formData, // ВАЖНО: без ручного Content-Type
     });
