@@ -2,7 +2,7 @@
 import { useEffect, useState, FormEvent } from 'react';
 import { Star, Quote } from 'lucide-react';
 
-const N8N_BASE = 'https://n8n.vladkuzmenkoai.com';
+const N8N_BASE = 'https://n8n.vladkuzmenko.com';
 
 type Review = {
   name: string;
