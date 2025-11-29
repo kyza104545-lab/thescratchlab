@@ -78,7 +78,7 @@ export default function Appointment() {
         fd.append('photos', file);
       });
 
-      const res = await fetch('https://n8n.vladkuzmenkoai.com/webhook/thescratchlab', {
+      const res = await fetch('https://n8n.vladkuzmenko.com/webhook/thescratchlab', {
         method: 'POST',
         body: fd, // НИКАКИХ headers — браузер сам проставит multipart boundary
       });
