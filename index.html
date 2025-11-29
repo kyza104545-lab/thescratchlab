@@ -55,9 +55,41 @@
     <meta name="theme-color" content="#0b1220" />
 
     <!-- Icons / Favicon -->
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/img/logo.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/logo.png" />
+    <!-- основной фавикон для браузеров и Google -->
+    <link
+      rel="icon"
+      href="/favicon.ico"
+      sizes="any"
+      type="image/x-icon"
+    />
+    <link
+      rel="shortcut icon"
+      href="/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- PNG-иконки для Android / PWA -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/img/icon-192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/img/icon-512.png"
+    />
+
+    <!-- Apple touch icon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/img/logo.png"
+    />
+
+    <!-- PWA manifest -->
     <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Fonts -->
@@ -133,7 +165,13 @@
         "openingHoursSpecification": [
           {
             "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ],
             "opens": "08:00",
             "closes": "19:00"
           },
