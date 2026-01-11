@@ -14,7 +14,18 @@ const workImages = [
   '/img/work4.jpg',
   '/img/work5.jpg',
   '/img/work6.jpg',
-  '/img/work7.jpg'
+  '/img/work7.jpg',
+
+  // new gallery images
+  '/img/gallery/gallery-01.jpeg',
+  '/img/gallery/gallery-02.jpeg',
+  '/img/gallery/gallery-03.jpeg',
+  '/img/gallery/gallery-04.jpeg',
+  '/img/gallery/gallery-05.jpeg',
+  '/img/gallery/gallery-06.jpeg',
+  '/img/gallery/gallery-07.jpeg',
+  '/img/gallery/gallery-08.jpeg',
+  '/img/gallery/gallery-09.jpeg'
 ];
 
 export default function Gallery() {
