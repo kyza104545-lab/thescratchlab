@@ -7,15 +7,13 @@ export default function Hero() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const red = '#ff2738';
-
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <img
           src="/img/hero-truck.jpg"
-          alt="Mobile paint correction and ceramic coating"
+          alt="Mobile Paint Correction & Ceramic Coating"
           className="w-full h-full object-cover"
         />
       </div>
@@ -26,15 +24,12 @@ export default function Hero() {
 
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Title */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.65)]">
-            Mobile Paint Correction{' '}
-            <span className="text-white">&amp;</span>{' '}
+            Mobile Paint Correction <span className="text-white">&amp;</span>{' '}
             <span className="text-blue-300">Ceramic Coating</span>
           </h1>
 
-          {/* Text like on screenshot */}
-          <p className="text-lg md:text-xl text-gray-100 mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+          <p className="text-lg md:text-xl text-gray-100 mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
             Restore dull and faded paint, remove swirl marks,
             <br className="hidden md:block" />
             and bring back deep gloss — <span className="font-semibold">without repainting.</span>
@@ -47,21 +42,20 @@ export default function Hero() {
             Serving Bucks County &amp; Philadelphia
           </p>
 
-          {/* Buttons (Book Appointment + Call Now) */}
           <div className="flex flex-col gap-4 justify-center items-center mb-10">
             <button
               onClick={scrollToAppointment}
               className="w-full max-w-md inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all hover:shadow-[0_0_18px_rgba(59,130,246,0.45)] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black"
             >
               <Calendar className="w-5 h-5" />
-              Book Appointment
+              Get a Free Estimate
             </button>
 
             <a
               href="tel:+12673793167"
               className="w-full max-w-md inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-black"
               style={{
-                backgroundImage: `linear-gradient(90deg, ${red}, #d10f28)`,
+                backgroundImage: 'linear-gradient(90deg, #ff2738, #d10f28)',
                 color: '#ffffff',
                 boxShadow: '0 0 12px rgba(255, 39, 56, 0.35)',
               }}
@@ -71,7 +65,6 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Our Services list */}
           <div className="max-w-2xl mx-auto bg-black/25 backdrop-blur-sm rounded-2xl border border-white/10 p-6 md:p-8">
             <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">Our Services</h2>
 

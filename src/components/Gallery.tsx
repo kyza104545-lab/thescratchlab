@@ -3,8 +3,8 @@ import { useState, useRef, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const beforeAfterCards = [
-  { image: '/img/before-after1.jpg', label: 'Before & After #1', objectPos: 'center top' },   // левый — тянем к верху
-  { image: '/img/before-after2.jpg', label: 'Before & After #2', objectPos: 'center center' } // правый — по центру
+  { image: '/img/before-after1.jpg', label: 'Before & After #1', objectPos: 'center top' },
+  { image: '/img/before-after2.jpg', label: 'Before & After #2', objectPos: 'center center' }
 ];
 
 const workImages = [
@@ -16,7 +16,6 @@ const workImages = [
   '/img/work6.jpg',
   '/img/work7.jpg',
 
-  // new gallery images
   '/img/gallery/gallery-01.jpeg',
   '/img/gallery/gallery-02.jpeg',
   '/img/gallery/gallery-03.jpeg',
@@ -87,11 +86,10 @@ export default function Gallery() {
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={card.image}
-                    alt={`${card.label}: paint correction & scratch removal results in Bucks County / Philadelphia / NJ`}
+                    alt={card.label}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
                     style={{ objectPosition: card.objectPos as any }}
                     loading="lazy"
-                    sizes="(max-width: 768px) 100vw, 50vw"
                     onClick={() => setLightboxImage(card.image)}
                   />
                 </div>
@@ -111,16 +109,14 @@ export default function Gallery() {
                 ref={carouselRef}
                 className="flex gap-4 overflow-x-auto scroll-smooth pb-4 md:pb-0"
                 style={{ scrollBehavior: 'smooth' }}
-                aria-label="Work gallery carousel"
               >
                 {workImages.map((image, index) => (
                   <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
                     <img
                       src={image}
-                      alt={`Paint correction work sample #${index + 1}`}
+                      alt={`Work sample #${index + 1}`}
                       className="w-full h-64 object-cover rounded-xl shadow-xl cursor-pointer hover:opacity-90 transition-opacity"
                       loading="lazy"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       onClick={() => setLightboxImage(image)}
                     />
                   </div>
@@ -166,18 +162,17 @@ export default function Gallery() {
           onClick={() => setLightboxImage(null)}
           role="dialog"
           aria-modal="true"
-          aria-label="Image preview"
         >
           <button
             className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
             onClick={() => setLightboxImage(null)}
-            aria-label="Close lightbox"
+            aria-label="Close"
           >
             <X className="w-8 h-8" />
           </button>
           <img
             src={lightboxImage}
-            alt="Enlarged work sample"
+            alt="Preview"
             className="max-w-full max-h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />
