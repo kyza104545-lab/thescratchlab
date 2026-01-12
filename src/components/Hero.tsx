@@ -3,51 +3,52 @@ import { Phone, Calendar } from 'lucide-react';
 
 export default function Hero() {
   const scrollToAppointment = () => {
-    const element = document.getElementById('appointment');
-    if (element) element.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById('appointment');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const red = '#ff2738';
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-      {/* фон */}
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden"
+    >
+      {/* Background */}
       <div className="absolute inset-0">
         <img
           src="/img/hero-truck.jpg"
-          alt="Mobile paint correction and scratch removal"
+          alt="Mobile paint correction and ceramic coating"
           className="w-full h-full object-cover"
         />
       </div>
 
-      {/* затемнение */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/80 to-black/90" />
+      {/* Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.06),_transparent_55%)]" />
 
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
+          {/* Title (как на скрине) */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.65)]">
-            <span style={{ color: red }}>Mobile</span>{' '}
-            <span className="text-yellow-300">Paint Correction</span>{' '}
-            <span style={{ color: red }}>&amp;</span>{' '}
-            <span className="text-yellow-300">Scratch Removal</span>
+            Mobile Paint Correction <span className="text-white">&amp;</span>{' '}
+            <span className="text-blue-300">Ceramic Coating</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-100 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
-            Scratch Removal. Paint Correction.
+          {/* Description */}
+          <p className="text-lg md:text-xl text-gray-100 mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+            Restore dull and faded paint, remove swirl marks,
+            <br className="hidden md:block" />
+            and bring back deep gloss —{' '}
+            <span className="font-semibold">without repainting.</span>
           </p>
 
-          <p className="text-lg md:text-xl text-gray-100 mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
-            <span className="text-yellow-300">Mobile Service</span>{' '}
-            <span style={{ color: red }}>— We Come To You</span>
-          </p>
+          <div className="text-sm md:text-base text-gray-200 space-y-1 mb-10">
+            <p>Professional mobile service — we come to you</p>
+            <p>Serving Bucks County • Philadelphia</p>
+          </div>
 
-          <p className="text-base md:text-lg text-gray-100">Located in Doylestown, PA 18901</p>
-          <p className="text-base md:text-lg text-gray-100">Serving Bucks County • Philadelphia</p>
-          <p className="text-base md:text-lg text-gray-100 mb-10">
-            Book your appointment &amp; get a fast estimate.
-          </p>
-
+          {/* Buttons (как просил в голосовом) */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <a
               href="tel:+12673793167"
@@ -71,19 +72,49 @@ export default function Hero() {
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-8 text-gray-300 text-sm md:text-base">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full" />
-              Mobile Service
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full" />
-              Professional Materials
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full" />
-              Expert Techniques
-            </div>
+          {/* Our Services (как на скрине) */}
+          <div className="max-w-xl mx-auto text-left bg-black/35 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
+            <h2 className="text-center text-xl md:text-2xl font-semibold text-white mb-4">
+              Our Services
+            </h2>
+
+            <ul className="space-y-2 text-gray-200">
+              <li className="flex gap-3">
+                <span className="mt-2 h-2 w-2 rounded-full bg-gray-200 shrink-0" />
+                <span>
+                  <strong>One-Step</strong> Paint Correction (Paint Enhancement)
+                </span>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-2 h-2 w-2 rounded-full bg-gray-200 shrink-0" />
+                <span>
+                  <strong>Two-Step</strong> Paint Correction (Deep Gloss &amp;
+                  Clarity)
+                </span>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-2 h-2 w-2 rounded-full bg-gray-200 shrink-0" />
+                <span>
+                  <strong>Ceramic</strong> Coating Protection
+                </span>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-2 h-2 w-2 rounded-full bg-gray-200 shrink-0" />
+                <span>
+                  <strong>Headlight</strong> Restoration
+                </span>
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-2 h-2 w-2 rounded-full bg-gray-200 shrink-0" />
+                <span>
+                  <strong>Light</strong> Scratch &amp; Swirl Mark Removal
+                </span>
+              </li>
+            </ul>
+
+            <p className="text-sm md:text-base text-gray-300 mt-5">
+              Light scratches and swirl marks are corrected as part of the paint correction process.
+            </p>
           </div>
         </div>
       </div>

@@ -2,30 +2,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-type BeforeAfterCard = {
-  image: string;
-  label: string;
-  objectPos: string;
-};
-
-const beforeAfterCards: BeforeAfterCard[] = [
-  { image: '/img/before-after1.jpg', label: 'Before & After #1', objectPos: 'center top' },
-  // before-after2.jpg удалили из секции по просьбе клиента (закресленная фотка)
+const beforeAfterCards = [
+  { image: '/img/before-after1.jpg', label: 'Photo #1', objectPos: 'center top' },
+  { image: '/img/gallery/gallery-01.jpeg', label: 'Photo #2', objectPos: 'center center' },
+  { image: '/img/gallery/gallery-02.jpeg', label: 'Photo #3', objectPos: 'center center' },
+  { image: '/img/gallery/gallery-03.jpeg', label: 'Photo #4', objectPos: 'center center' },
+  { image: '/img/gallery/gallery-04.jpeg', label: 'Photo #5', objectPos: 'center center' },
 ];
 
-const workImages: string[] = [
-  // новые фото — первыми, чтобы на мобилке шли 1..9 сверху/впереди
-  '/img/gallery/gallery-01.jpeg',
-  '/img/gallery/gallery-02.jpeg',
-  '/img/gallery/gallery-03.jpeg',
-  '/img/gallery/gallery-04.jpeg',
-  '/img/gallery/gallery-05.jpeg',
-  '/img/gallery/gallery-06.jpeg',
-  '/img/gallery/gallery-07.jpeg',
-  '/img/gallery/gallery-08.jpeg',
-  '/img/gallery/gallery-09.jpeg',
-
-  // старые
+const workImages = [
   '/img/work1.jpg',
   '/img/work2.jpg',
   '/img/work3.jpg',
@@ -33,6 +18,13 @@ const workImages: string[] = [
   '/img/work5.jpg',
   '/img/work6.jpg',
   '/img/work7.jpg',
+
+  // remaining new gallery images (чтобы не дублировать Photo #2-#5)
+  '/img/gallery/gallery-05.jpeg',
+  '/img/gallery/gallery-06.jpeg',
+  '/img/gallery/gallery-07.jpeg',
+  '/img/gallery/gallery-08.jpeg',
+  '/img/gallery/gallery-09.jpeg',
 ];
 
 export default function Gallery() {
@@ -52,36 +44,30 @@ export default function Gallery() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const maxIndex = Math.max(0, workImages.length - itemsVisible);
+  const maxIndex = Math.max(1, workImages.length - itemsVisible + 1);
 
-  useEffect(() => {
-    setCarouselIndex((i) => Math.min(i, maxIndex));
-  }, [itemsVisible, maxIndex]);
-
-  const nextSlide = () => {
-    setCarouselIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  };
-
-  const prevSlide = () => {
-    setCarouselIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
-  };
+  const nextSlide = () => setCarouselIndex((prev) => (prev + 1) % maxIndex);
+  const prevSlide = () => setCarouselIndex((prev) => (prev - 1 + maxIndex) % maxIndex);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!lightboxImage) return;
       if (e.key === 'Escape') setLightboxImage(null);
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [lightboxImage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightboxImage, maxIndex]);
 
   useEffect(() => {
-    const el = carouselRef.current?.children?.[carouselIndex] as HTMLElement | undefined;
-    if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-  }, [carouselIndex]);
+    if (!carouselRef.current) return;
 
-  const beforeGridClass =
-    beforeAfterCards.length <= 1 ? 'grid grid-cols-1 max-w-3xl mx-auto' : 'grid md:grid-cols-2';
+    // Важно: gap влияет на scrollWidth, поэтому считаем шаг по ширине видимой области
+    const step = carouselRef.current.clientWidth / itemsVisible;
+    carouselRef.current.scrollTo({ left: carouselIndex * step, behavior: 'smooth' });
+  }, [carouselIndex, itemsVisible]);
 
   return (
     <section id="gallery" className="py-20 bg-gray-900">
@@ -89,23 +75,24 @@ export default function Gallery() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Before &amp; After</h2>
-            <p className="text-xl text-gray-400">See the transformation</p>
+            <p className="text-xl text-gray-400">1–5 (top to bottom)</p>
           </div>
 
-          <div className={`${beforeGridClass} gap-6 mb-20`}>
+          {/* 1–5 сверху вниз */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
             {beforeAfterCards.map((card, index) => (
               <div
                 key={index}
-                className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all border-2 border-white/10"
+                className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all border border-white/10"
               >
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={card.image}
-                    alt={`${card.label}: paint correction & scratch removal results`}
+                    alt={card.label}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                    style={{ objectPosition: card.objectPos }}
+                    style={{ objectPosition: card.objectPos as any }}
                     loading="lazy"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     onClick={() => setLightboxImage(card.image)}
                   />
                 </div>
@@ -123,15 +110,14 @@ export default function Gallery() {
             <div className="relative">
               <div
                 ref={carouselRef}
-                className="flex gap-4 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory"
-                style={{ scrollBehavior: 'smooth' }}
+                className="flex gap-4 overflow-x-auto scroll-smooth pb-4 md:pb-0"
                 aria-label="Work gallery carousel"
               >
                 {workImages.map((image, index) => (
-                  <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3 snap-start">
+                  <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
                     <img
                       src={image}
-                      alt={`Work photo #${index + 1}`}
+                      alt={`Work sample #${index + 1}`}
                       className="w-full h-64 object-cover rounded-xl shadow-xl cursor-pointer hover:opacity-90 transition-opacity"
                       loading="lazy"
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -141,11 +127,11 @@ export default function Gallery() {
                 ))}
               </div>
 
-              {/* стрелки — ВИДИМЫ и на мобилке */}
+              {/* стрелки видимы и на мобиле */}
               <button
                 onClick={prevSlide}
                 className="flex absolute left-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full text-white transition-colors z-10 shadow-lg"
-                aria-label="Previous"
+                aria-label="Previous slide"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
@@ -153,18 +139,18 @@ export default function Gallery() {
               <button
                 onClick={nextSlide}
                 className="flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full text-white transition-colors z-10 shadow-lg"
-                aria-label="Next"
+                aria-label="Next slide"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
 
-              <div className="flex justify-center gap-2 mt-6 flex-wrap">
-                {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <div className="flex justify-center gap-2 mt-8">
+                {Array.from({ length: maxIndex }).map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCarouselIndex(idx)}
-                    className={`h-2 rounded-full transition-all ${
-                      idx === carouselIndex ? 'bg-blue-500 w-8' : 'bg-gray-600 hover:bg-gray-500 w-2'
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      idx === carouselIndex ? 'bg-blue-500 w-8' : 'bg-gray-600 hover:bg-gray-500'
                     }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
