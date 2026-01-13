@@ -14,7 +14,6 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden"
     >
-      {/* Background */}
       <div className="absolute inset-0">
         <img
           src="/img/hero-truck.jpg"
@@ -23,25 +22,21 @@ export default function Hero() {
         />
       </div>
 
-      {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.06),_transparent_55%)]" />
 
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Title (как просил Андрей) */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.65)]">
             Paint Correction
             <br />
             <span className="text-blue-300">Ceramic Coating</span>
           </h1>
 
-          {/* Description (оставляем как было) */}
           <p className="text-lg md:text-xl text-gray-100 mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
             Restore dull and faded paint, remove swirl marks,
             <br className="hidden md:block" />
-            and bring back deep gloss —{' '}
-            <span className="font-semibold">without repainting.</span>
+            and bring back deep gloss — <span className="font-semibold">without repainting.</span>
           </p>
 
           <div className="text-sm md:text-base text-gray-200 space-y-1 mb-10">
@@ -49,7 +44,6 @@ export default function Hero() {
             <p>Serving Bucks County • Philadelphia</p>
           </div>
 
-          {/* Buttons (не трогаем логику) */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <a
               href="tel:+12673793167"
@@ -73,7 +67,6 @@ export default function Hero() {
             </button>
           </div>
 
-          {/* Our Services (правки по цветам) */}
           <div className="max-w-xl mx-auto text-left bg-black/35 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
             <h2 className="text-center text-xl md:text-2xl font-semibold text-blue-300 mb-4">
               Our Services
@@ -81,10 +74,7 @@ export default function Hero() {
 
             <ul className="space-y-2 text-white">
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <strong>One-Step</strong>{' '}
                   <span className="text-blue-300 font-semibold">Paint Correction</span>{' '}
@@ -93,10 +83,7 @@ export default function Hero() {
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <strong>Two-Step</strong>{' '}
                   <span className="text-blue-300 font-semibold">Paint Correction</span>{' '}
@@ -105,30 +92,21 @@ export default function Hero() {
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <span className="text-blue-300 font-semibold">Ceramic</span> Coating Protection
                 </span>
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <strong>Headlight</strong> Restoration
                 </span>
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <strong>Light</strong> Scratch &amp; Swirl Mark Removal
                 </span>

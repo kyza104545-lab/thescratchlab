@@ -19,10 +19,8 @@ export default function Gallery() {
   const [itemsVisible, setItemsVisible] = useState(3);
 
   const workImages = useMemo(() => {
-    // 18 новых фото, которые Андрей прислал (просто добавляем, не заменяем старые)
     const newOnes = Array.from({ length: 18 }, (_, i) => `/img/gallery/new-${pad2(i + 1)}.jpg`);
 
-    // существующие фото (как было)
     const existing = [
       '/img/gallery/gallery-01.jpeg',
       '/img/gallery/gallery-02.jpeg',
@@ -84,7 +82,7 @@ export default function Gallery() {
     <section id="gallery" className="py-20 bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          {/* 3 фото с подписями (между Services и Our Work) */}
+          {/* 3 фото с подписями */}
           <div className="grid gap-6 md:grid-cols-3 mb-14">
             {showcase.map((item) => (
               <div
