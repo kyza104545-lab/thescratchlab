@@ -8,7 +8,7 @@ export default function About() {
               About The Scratch Lab
             </h2>
 
-            <div className="space-y-4 text-lg text-gray-300 leading-relaxed">
+            <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
               <p>
                 We provide mobile paint correction and ceramic coating services for cars, boats, and aircraft.
               </p>
