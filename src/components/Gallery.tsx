@@ -13,12 +13,16 @@ function pad2(n: number) {
 }
 
 export default function Gallery() {
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
   const [itemsVisible, setItemsVisible] = useState(3);
 
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  const touchStartX = useRef<number | null>(null);
+
   const workImages = useMemo(() => {
+    // 18 новых фото (добавляем, не заменяем старые)
     const newOnes = Array.from({ length: 18 }, (_, i) => `/img/gallery/new-${pad2(i + 1)}.jpg`);
 
     const existing = [
@@ -31,10 +35,8 @@ export default function Gallery() {
       '/img/gallery/gallery-07.jpeg',
       '/img/gallery/gallery-08.jpeg',
       '/img/gallery/gallery-09.jpeg',
-
       '/img/before-after1.jpg',
       '/img/before-after2.jpg',
-
       '/img/work1.jpg',
       '/img/work2.jpg',
       '/img/work3.jpg',
@@ -47,6 +49,32 @@ export default function Gallery() {
     return [...newOnes, ...existing];
   }, []);
 
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const slidesCount = useMemo(() => {
+    return Math.max(1, workImages.length - itemsVisible + 1);
+  }, [workImages.length, itemsVisible]);
+
+  const openLightbox = (idx: number) => setLightboxIndex(idx);
+  const closeLightbox = () => setLightboxIndex(null);
+
+  const nextCarousel = () => setCarouselIndex((p) => (p + 1) % slidesCount);
+  const prevCarousel = () => setCarouselIndex((p) => (p - 1 + slidesCount) % slidesCount);
+
+  const nextLightbox = () => {
+    setLightboxIndex((p) => {
+      if (p === null) return p;
+      return (p + 1) % workImages.length;
+    });
+  };
+
+  const prevLightbox = () => {
+    setLightboxIndex((p) => {
+      if (p === null) return p;
+      return (p - 1 + workImages.length) % workImages.length;
+    });
+  };
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) setItemsVisible(1);
@@ -58,48 +86,78 @@ export default function Gallery() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const maxIndex = Math.max(1, workImages.length - itemsVisible + 1);
+  // Скроллим карусель ровно по элементам (без половинок)
+  useEffect(() => {
+    const el = itemRefs.current[carouselIndex];
+    if (!el || !carouselRef.current) return;
 
-  const nextSlide = () => setCarouselIndex((prev) => (prev + 1) % maxIndex);
-  const prevSlide = () => setCarouselIndex((prev) => (prev - 1 + maxIndex) % maxIndex);
+    carouselRef.current.scrollTo({
+      left: el.offsetLeft,
+      behavior: 'smooth',
+    });
+  }, [carouselIndex]);
 
+  // Клавиатура: если открыт lightbox — листаем там, иначе — карусель
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!lightboxImage) return;
-      if (e.key === 'Escape') setLightboxImage(null);
+      if (lightboxIndex !== null) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') nextLightbox();
+        if (e.key === 'ArrowLeft') prevLightbox();
+        return;
+      }
+
+      if (e.key === 'ArrowRight') nextCarousel();
+      if (e.key === 'ArrowLeft') prevCarousel();
     };
+
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [lightboxImage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightboxIndex, slidesCount]);
 
-  useEffect(() => {
-    if (!carouselRef.current) return;
-    const step = carouselRef.current.clientWidth / itemsVisible;
-    carouselRef.current.scrollTo({ left: carouselIndex * step, behavior: 'smooth' });
-  }, [carouselIndex, itemsVisible]);
+  const onLightboxTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  };
+
+  const onLightboxTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const endX = e.changedTouches[0]?.clientX ?? touchStartX.current;
+    const dx = endX - touchStartX.current;
+    touchStartX.current = null;
+
+    if (Math.abs(dx) < 60) return;
+    if (dx < 0) nextLightbox();
+    else prevLightbox();
+  };
 
   return (
     <section id="gallery" className="py-20 bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          {/* 3 фото с подписями */}
-          <div className="grid gap-6 md:grid-cols-3 mb-14">
-            {showcase.map((item) => (
+          {/* Showcase */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white">
+              Full Vehicle, Boat &amp; RV Polishing
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
+            {showcase.map((item, idx) => (
               <div
-                key={item.image}
+                key={idx}
                 className="bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10"
               >
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={item.image}
                     alt={item.caption}
-                    className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity"
+                    className="w-full h-full object-cover"
                     loading="lazy"
-                    onClick={() => setLightboxImage(item.image)}
                   />
                 </div>
-                <div className="p-4 bg-gray-800/70">
-                  <p className="text-white font-medium text-center">{item.caption}</p>
+                <div className="p-5 bg-gray-800/70">
+                  <p className="text-white font-semibold text-center text-lg">{item.caption}</p>
                 </div>
               </div>
             ))}
@@ -113,25 +171,32 @@ export default function Gallery() {
             <div className="relative">
               <div
                 ref={carouselRef}
-                className="flex gap-4 overflow-x-auto scroll-smooth pb-4 md:pb-0"
+                className="flex gap-4 overflow-x-auto scroll-smooth pb-4 md:pb-0 snap-x snap-mandatory"
                 aria-label="Work gallery carousel"
               >
                 {workImages.map((image, index) => (
-                  <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
+                  <div
+                    key={index}
+                    ref={(el) => {
+                      itemRefs.current[index] = el;
+                    }}
+                    className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3 snap-start"
+                  >
                     <img
                       src={image}
                       alt={`Work sample #${index + 1}`}
                       className="w-full h-64 object-cover rounded-xl shadow-xl cursor-pointer hover:opacity-90 transition-opacity"
                       loading="lazy"
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      onClick={() => setLightboxImage(image)}
+                      onClick={() => openLightbox(index)}
                     />
                   </div>
                 ))}
               </div>
 
+              {/* стрелки */}
               <button
-                onClick={prevSlide}
+                onClick={prevCarousel}
                 className="flex absolute left-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full text-white transition-colors z-10 shadow-lg"
                 aria-label="Previous slide"
               >
@@ -139,15 +204,16 @@ export default function Gallery() {
               </button>
 
               <button
-                onClick={nextSlide}
+                onClick={nextCarousel}
                 className="flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full text-white transition-colors z-10 shadow-lg"
                 aria-label="Next slide"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
 
+              {/* точки */}
               <div className="flex justify-center gap-2 mt-8">
-                {Array.from({ length: maxIndex }).map((_, idx) => (
+                {Array.from({ length: slidesCount }).map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCarouselIndex(idx)}
@@ -163,27 +229,60 @@ export default function Gallery() {
         </div>
       </div>
 
-      {lightboxImage && (
+      {/* Lightbox with navigation */}
+      {lightboxIndex !== null && (
         <div
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
-          onClick={() => setLightboxImage(null)}
+          onClick={closeLightbox}
           role="dialog"
           aria-modal="true"
           aria-label="Image preview"
         >
           <button
             className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
-            onClick={() => setLightboxImage(null)}
+            onClick={closeLightbox}
             aria-label="Close lightbox"
           >
             <X className="w-8 h-8" />
           </button>
-          <img
-            src={lightboxImage}
-            alt="Enlarged work sample"
-            className="max-w-full max-h-full object-contain"
+
+          <button
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              prevLightbox();
+            }}
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-10 h-10" />
+          </button>
+
+          <button
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              nextLightbox();
+            }}
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-10 h-10" />
+          </button>
+
+          <div
+            className="max-w-full max-h-full"
             onClick={(e) => e.stopPropagation()}
-          />
+            onTouchStart={onLightboxTouchStart}
+            onTouchEnd={onLightboxTouchEnd}
+          >
+            <img
+              src={workImages[lightboxIndex]}
+              alt="Enlarged work sample"
+              className="max-w-full max-h-[85vh] object-contain"
+            />
+            <div className="text-center text-white/70 text-sm mt-3">
+              {lightboxIndex + 1} / {workImages.length}
+            </div>
+          </div>
         </div>
       )}
     </section>
