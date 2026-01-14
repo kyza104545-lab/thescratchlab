@@ -29,9 +29,9 @@ export default function Hero() {
 
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Mobile label (по центру сверху) */}
+          {/* Mobile label (чуть крупнее) */}
           <div className="mb-3">
-            <span className="inline-block text-sm md:text-base text-white/80 uppercase tracking-[0.35em]">
+            <span className="inline-block text-base md:text-lg text-white/80 uppercase tracking-[0.35em]">
               Mobile
             </span>
           </div>
@@ -43,11 +43,11 @@ export default function Hero() {
             <span className="text-blue-300">Ceramic Coating</span>
           </h1>
 
-          {/* Description */}
+          {/* Description (пунктуация + a deep gloss) */}
           <p className="text-lg md:text-xl text-gray-100 mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
-            Restore dull and faded paint, remove swirl marks,
+            Restore dull and faded paint, remove swirl marks,{' '}
             <br className="hidden md:block" />
-            and bring back deep gloss — <span className="font-semibold">without repainting.</span>
+            and bring back a deep gloss — <span className="font-semibold">without repainting.</span>
           </p>
 
           <div className="text-sm md:text-base text-gray-200 space-y-1 mb-10">
@@ -87,50 +87,35 @@ export default function Hero() {
 
             <ul className="space-y-2 text-white">
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <span className="font-semibold">One-Step</span> Paint Correction (Paint Enhancement)
                 </span>
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <span className="font-semibold">Two-Step</span> Paint Correction (Deep Gloss &amp; Clarity)
                 </span>
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <span className="font-semibold">Ceramic</span> Coating Protection
                 </span>
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <span className="font-semibold">Headlight</span> Restoration
                 </span>
               </li>
 
               <li className="flex gap-3">
-                <span
-                  className="mt-2 h-2 w-2 rounded-full shrink-0"
-                  style={{ backgroundColor: red }}
-                />
+                <span className="mt-2 h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: red }} />
                 <span>
                   <span className="font-semibold">Light</span> Scratch &amp; Swirl Mark Removal
                 </span>
