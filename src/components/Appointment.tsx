@@ -24,12 +24,29 @@ export default function Appointment() {
 
   const validateForm = () => {
     const e: Record<string, string> = {};
+
+    const email = formData.email.trim();
+    const phone = formData.phone.trim();
+
     if (!formData.name.trim()) e.name = 'Name is required';
-    if (!formData.email.trim() || !validateEmail(formData.email)) e.email = 'Valid email is required';
-    if (!formData.phone.trim() || !validatePhone(formData.phone)) e.phone = 'Valid phone is required';
+
+    // ✅ ВАЖНО: нужно хотя бы одно поле (Email или Phone)
+    if (!email && !phone) {
+      e.email = 'Email or phone is required';
+      e.phone = 'Email or phone is required';
+    } else {
+      // если email заполнен — проверяем формат
+      if (email && !validateEmail(email)) e.email = 'Valid email is required';
+
+      // если phone заполнен — проверяем формат
+      if (phone && !validatePhone(phone)) e.phone = 'Valid phone is required';
+    }
+
     if (!formData.car.trim()) e.car = 'Car make/model is required';
+
     if (!formData.zip.trim()) e.zip = 'ZIP code is required';
     else if (!validateZip(formData.zip)) e.zip = 'Invalid ZIP format (12345 or 12345-6789)';
+
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -158,10 +175,11 @@ export default function Appointment() {
                 error={errors.name}
                 placeholder="John Doe"
               />
+
+              {/* ✅ Одно из двух обязательно: Email или Phone */}
               <Field
                 id="email"
                 label="Email"
-                required
                 value={formData.email}
                 onChange={(v) => setFormData({ ...formData, email: v })}
                 error={errors.email}
@@ -171,13 +189,13 @@ export default function Appointment() {
               <Field
                 id="phone"
                 label="Phone"
-                required
                 value={formData.phone}
                 onChange={(v) => setFormData({ ...formData, phone: v })}
                 error={errors.phone}
                 placeholder="+1 267 379 3167"
                 type="tel"
               />
+
               <Field
                 id="car"
                 label="Car Make / Model"
@@ -195,7 +213,7 @@ export default function Appointment() {
                 onChange={(v) => setFormData({ ...formData, zip: v })}
                 error={errors.zip}
                 placeholder="18901"
-                pattern="^\d{5}(-\d{4})?$"
+                pattern="^\\d{5}(-\\d{4})?$"
               />
 
               <div>
