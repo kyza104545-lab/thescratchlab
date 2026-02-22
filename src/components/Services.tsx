@@ -40,7 +40,7 @@ export default function Services() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Serving Bucks County, Philadelphia & New Jersey
+              Serving Myrtle Beach & Surrounding Areas
             </h2>
             <p className="text-xl text-gray-400">
               Professional mobile paint restoration at your location

@@ -73,7 +73,7 @@ export default function Contact() {
                 <div>
                   <div className="text-sm text-gray-400 mb-1">Address</div>
                   <div className="text-lg text-white">
-                    9-4 Aspen Way, Doylestown, PA 18901, United States
+                    
                   </div>
                 </div>
               </div>

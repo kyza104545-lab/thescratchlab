@@ -189,6 +189,7 @@ export default function Appointment() {
               <Field
                 id="phone"
                 label="Phone"
+                required
                 value={formData.phone}
                 onChange={(v) => setFormData({ ...formData, phone: v })}
                 error={errors.phone}
@@ -199,7 +200,6 @@ export default function Appointment() {
               <Field
                 id="car"
                 label="Car Make / Model"
-                required
                 value={formData.car}
                 onChange={(v) => setFormData({ ...formData, car: v })}
                 error={errors.car}
@@ -212,7 +212,7 @@ export default function Appointment() {
                 value={formData.zip}
                 onChange={(v) => setFormData({ ...formData, zip: v })}
                 error={errors.zip}
-                placeholder="18901"
+                placeholder="29577"
                 pattern="^\\d{5}(-\\d{4})?$"
               />
 

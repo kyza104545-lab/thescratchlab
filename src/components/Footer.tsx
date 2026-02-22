@@ -28,7 +28,7 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-2 text-gray-400">
                 <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>9-4 Aspen Way, Doylestown, PA 18901, United States</span>
+                <span></span>
               </div>
             </div>
           </div>

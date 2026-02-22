@@ -52,7 +52,7 @@ export default function Hero() {
 
           <div className="text-sm md:text-base text-gray-200 space-y-1 mb-10">
             <p>Professional mobile service — we come to you</p>
-            <p>Serving Bucks County • Philadelphia</p>
+            <p>Serving Myrtle Beach • Surrounding Areas</p>
           </div>
 
           {/* Buttons */}
