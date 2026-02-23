@@ -16,7 +16,7 @@ export default function About() {
                 We work with faded paint, swirl marks, and light scratches, helping restore shine and overall appearance.
               </p>
               <p>
-                Services are performed on-site throughout Bucks County, Philadelphia.
+                Services are performed on-site throughout Myrtle Beach and surrounding areas.
               </p>
             </div>
           </div>
