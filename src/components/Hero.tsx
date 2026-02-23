@@ -28,8 +28,8 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.06),_transparent_55%)]" />
 
       <div className="container mx-auto px-4 py-16 md:py-20 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Title: only the 2 client lines, no extra "Mobile" label */}
+        <div className="max-w-6xl mx-auto text-center">
+          {/* Title */}
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.65)]">
             MOBILE BOAT &amp; RV DETAILING
             <br />
@@ -37,16 +37,17 @@ export default function Hero() {
           </h1>
 
           {/* Exact client text */}
-          <p className="text-base md:text-xl text-white mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+          <p className="max-w-5xl mx-auto text-base md:text-xl text-white mb-5 leading-snug drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
             We restore oxidized and faded gelcoat and paint, remove swirl marks, and bring back a deep, marine-grade gloss.
           </p>
 
-          <div className="text-sm md:text-base text-white leading-relaxed mb-9 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
-            <p>Professional mobile service —</p>
-            <p>we come to your home, marina,</p>
-            <p>storage facility, or dock.</p>
-            <p>Serving Myrtle Beach 🏝️</p>
-            <p>and the surrounding coastal areas.</p>
+          <div className="max-w-3xl mx-auto text-sm md:text-base text-white leading-relaxed mb-9 drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+            <p className="mb-1">
+              Professional mobile service — we come to your home, marina, storage facility, or dock.
+            </p>
+            <p>
+              Serving Myrtle Beach 🏝️ and the surrounding coastal areas.
+            </p>
           </div>
 
           {/* Buttons */}
