@@ -22,30 +22,44 @@ export default function Appointment() {
   const validateEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
   const validatePhone = (p: string) => /^[\d+\-\s()]{7,20}$/.test(p);
 
+  const setField = (key: keyof typeof formData, value: string) => {
+    setFormData((p) => ({ ...p, [key]: value }));
+
+    // очищаем ошибки по мере ввода (чтобы не висели красным после первого submit)
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[key];
+
+      // если ошибка была "Email or phone is required" — чистим оба, когда человек начал вводить одно из них
+      if (key === 'email' || key === 'phone') {
+        delete next.email;
+        delete next.phone;
+      }
+      return next;
+    });
+  };
+
   const validateForm = () => {
     const e: Record<string, string> = {};
 
-    const email = formData.email.trim();
-    const phone = formData.phone.trim();
-
     if (!formData.name.trim()) e.name = 'Name is required';
 
-    // ✅ ВАЖНО: нужно хотя бы одно поле (Email или Phone)
-    if (!email && !phone) {
+    const hasEmail = !!formData.email.trim();
+    const hasPhone = !!formData.phone.trim();
+
+    // минимум один контакт: phone или email
+    if (!hasEmail && !hasPhone) {
       e.email = 'Email or phone is required';
       e.phone = 'Email or phone is required';
     } else {
-      // если email заполнен — проверяем формат
-      if (email && !validateEmail(email)) e.email = 'Valid email is required';
-
-      // если phone заполнен — проверяем формат
-      if (phone && !validatePhone(phone)) e.phone = 'Valid phone is required';
+      if (hasEmail && !validateEmail(formData.email)) e.email = 'Please enter a valid email';
+      if (hasPhone && !validatePhone(formData.phone)) e.phone = 'Please enter a valid phone';
     }
 
-    if (!formData.car.trim()) e.car = 'Car make/model is required';
-
-    if (!formData.zip.trim()) e.zip = 'ZIP code is required';
-    else if (!validateZip(formData.zip)) e.zip = 'Invalid ZIP format (12345 or 12345-6789)';
+    // ZIP НЕ обязателен: проверяем только если введён
+    if (formData.zip.trim() && !validateZip(formData.zip.trim())) {
+      e.zip = 'Invalid ZIP format (12345 or 12345-6789)';
+    }
 
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -72,7 +86,6 @@ export default function Appointment() {
 
   const removeFile = (i: number) => setFiles((p) => p.filter((_, idx) => idx !== i));
 
-  // 🔴 ВАЖНО: этот submit теперь шлёт всё сразу в n8n, а не в Netlify
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -90,14 +103,13 @@ export default function Appointment() {
       fd.append('zip', formData.zip);
       fd.append('message', formData.message);
 
-      // до 5 файлов, каждый максимум 10 МБ
       files.forEach((file) => {
         fd.append('photos', file);
       });
 
       const res = await fetch('https://n8n.vladkuzmenko.com/webhook/thescratchlab', {
         method: 'POST',
-        body: fd, // НИКАКИХ headers — браузер сам проставит multipart boundary
+        body: fd,
       });
 
       if (!res.ok) {
@@ -108,6 +120,7 @@ export default function Appointment() {
       setSubmitStatus('success');
       setFormData({ name: '', email: '', phone: '', car: '', zip: '', message: '' });
       setFiles([]);
+      setErrors({});
     } catch (err) {
       console.error(err);
       setSubmitStatus('error');
@@ -157,7 +170,7 @@ export default function Appointment() {
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Schedule Your Appointment</h2>
             <p className="text-xl text-gray-400">
-              Get a quick estimate — upload photos, tell us your ZIP and car details.
+              Get a quick estimate — upload photos, tell us your ZIP and details.
             </p>
           </div>
 
@@ -171,49 +184,56 @@ export default function Appointment() {
                 label="Full Name"
                 required
                 value={formData.name}
-                onChange={(v) => setFormData({ ...formData, name: v })}
+                onChange={(v) => setField('name', v)}
                 error={errors.name}
                 placeholder="John Doe"
+                autoComplete="name"
               />
 
-              {/* ✅ Одно из двух обязательно: Email или Phone */}
               <Field
                 id="email"
                 label="Email"
                 value={formData.email}
-                onChange={(v) => setFormData({ ...formData, email: v })}
+                onChange={(v) => setField('email', v)}
                 error={errors.email}
                 placeholder="john@example.com"
                 type="email"
+                autoComplete="email"
               />
+
               <Field
                 id="phone"
                 label="Phone"
-                required
                 value={formData.phone}
-                onChange={(v) => setFormData({ ...formData, phone: v })}
+                onChange={(v) => setField('phone', v)}
                 error={errors.phone}
                 placeholder="+1 267 379 3167"
                 type="tel"
+                autoComplete="tel"
+                inputMode="tel"
               />
 
               <Field
                 id="car"
                 label="Car Make / Model"
                 value={formData.car}
-                onChange={(v) => setFormData({ ...formData, car: v })}
+                onChange={(v) => setField('car', v)}
                 error={errors.car}
                 placeholder="e.g., Tesla Model 3, BMW X5"
+                autoComplete="off"
               />
+
+              {/* ZIP теперь НЕ блокирует отправку: без pattern и без required */}
               <Field
                 id="zip"
                 label="ZIP Code"
-                required
                 value={formData.zip}
-                onChange={(v) => setFormData({ ...formData, zip: v })}
+                onChange={(v) => setField('zip', v)}
                 error={errors.zip}
                 placeholder="29577"
-                pattern="^\\d{5}(-\\d{4})?$"
+                autoComplete="postal-code"
+                inputMode="numeric"
+                maxLength={10}
               />
 
               <div>
@@ -273,7 +293,7 @@ export default function Appointment() {
                   id="message"
                   rows={4}
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={(e) => setField('message', e.target.value)}
                   className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none"
                   placeholder="Describe what you'd like to repair or restore..."
                 />
@@ -324,7 +344,9 @@ function Field({
   error,
   required,
   type = 'text',
-  pattern,
+  autoComplete,
+  inputMode,
+  maxLength,
 }: {
   id: string;
   label: string;
@@ -334,7 +356,9 @@ function Field({
   error?: string;
   required?: boolean;
   type?: string;
-  pattern?: string;
+  autoComplete?: string;
+  inputMode?: string;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -343,10 +367,13 @@ function Field({
       </label>
       <input
         id={id}
+        name={id}
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        pattern={pattern}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+        maxLength={maxLength}
         className={`w-full px-4 py-3 bg-gray-900 border ${
           error ? 'border-red-500' : 'border-gray-600'
         } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors`}
