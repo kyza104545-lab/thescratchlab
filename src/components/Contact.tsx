@@ -18,7 +18,7 @@ export default function Contact() {
           <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-2xl p-8 md:p-12 mb-12">
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <a
-                href="tel:+12673793167"
+                href="tel:+18438558272"
                 className="flex items-start gap-4 p-6 bg-gray-800/50 rounded-xl hover:bg-gray-800 transition-all border border-gray-700 hover:border-blue-500/50"
               >
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -26,7 +26,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="text-sm text-gray-400 mb-1">Call us</div>
-                  <div className="text-xl font-semibold text-white">267-379-3167</div>
+                  <div className="text-xl font-semibold text-white">843-855-8272</div>
                 </div>
               </a>
 

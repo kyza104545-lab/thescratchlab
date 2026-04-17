@@ -7,8 +7,8 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img src="/img/logo.png" alt="The Scratch Lab Logo" className="h-10 w-10 object-contain" />
-              <span className="text-xl font-semibold text-white">The Scratch Lab</span>
+              <img src="/img/logo.png" alt="Coastal Mobile Boat Detailing Logo" className="h-10 w-10 object-contain" />
+              <span className="text-xl font-semibold text-white">Coastal Mobile Boat Detailing</span>
             </div>
             <p className="text-gray-400 text-sm">
               Mobile Paint Restoration Service
@@ -19,11 +19,11 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">Contact</h3>
             <div className="space-y-3 text-sm">
               <a
-                href="tel:+12673793167"
+                href="tel:+18438558272"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                267-379-3167
+                843-855-8272
               </a>
 
               <a
@@ -68,7 +68,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2026 The Scratch Lab. All rights reserved.</p>
+          <p>&copy; 2026 Coastal Mobile Boat Detailing. All rights reserved.</p>
         </div>
       </div>
     </footer>

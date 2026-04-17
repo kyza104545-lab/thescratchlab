@@ -252,7 +252,7 @@ export default function Reviews() {
                   value={form.text}
                   onChange={e => setForm(f => ({ ...f, text: e.target.value }))}
                   className="w-full px-3 py-2 bg-gray-950 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
-                  placeholder="How was your experience with The Scratch Lab?"
+                  placeholder="How was your experience with Coastal Mobile Boat Detailing?"
                   required
                 />
               </div>

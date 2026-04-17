@@ -21,12 +21,12 @@ export default function Header() {
           <div className="flex items-center gap-3">
             <img
               src="/img/logo.png"
-              alt="The Scratch Lab Logo"
+              alt="Coastal Mobile Boat Detailing Logo"
               className="h-12 w-12 object-contain"
             />
             <div className="relative inline-block">
               <span className="text-xl font-semibold text-white">
-                The Scratch Lab
+                Coastal Mobile Boat Detailing
               </span>
               <span className="absolute left-0 -bottom-1 w-full h-[2px] bg-yellow-400 rounded-full" />
             </div>
@@ -73,7 +73,7 @@ export default function Header() {
 
             <div className="flex items-center gap-4 ml-4 pl-4 border-l border-gray-700">
               <a
-                href="tel:+12673793167"
+                href="tel:+18438558272"
                 className="text-blue-400 hover:text-blue-300 transition-colors"
                 aria-label="Call us"
               >
@@ -103,7 +103,7 @@ export default function Header() {
           {/* Mobile: call + burger */}
           <div className="lg:hidden flex items-center gap-4">
             <a
-              href="tel:+12673793167"
+              href="tel:+18438558272"
               className="text-blue-400 hover:text-blue-300 transition-colors"
               aria-label="Call us"
             >

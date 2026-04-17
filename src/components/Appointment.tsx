@@ -144,8 +144,8 @@ export default function Appointment() {
             </p>
             <p className="text-gray-400 mb-8">
               Need immediate assistance? Call us at{' '}
-              <a href="tel:+12673793167" className="text-blue-400 hover:text-blue-300">
-                267-379-3167
+              <a href="tel:+18438558272" className="text-blue-400 hover:text-blue-300">
+                843-855-8272
               </a>
             </p>
             <button
@@ -325,8 +325,8 @@ export default function Appointment() {
 
           <p className="text-center text-gray-400 mt-8">
             Prefer to call? Reach us at{' '}
-            <a href="tel:+12673793167" className="text-blue-400 hover:text-blue-300 font-medium">
-              267-379-3167
+            <a href="tel:+18438558272" className="text-blue-400 hover:text-blue-300 font-medium">
+              843-855-8272
             </a>
           </p>
         </div>
