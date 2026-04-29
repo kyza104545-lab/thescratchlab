@@ -1,35 +1,35 @@
-import { Sparkles, Disc, Shield, Wind, Droplet, Lightbulb } from 'lucide-react';
+import { Sparkles, Disc, Shield, Wind, Droplet, Anchor } from 'lucide-react';
 
 const services = [
   {
-    icon: Sparkles,
-    title: 'Car Scratch Removal',
-    description: 'Precise removal and finish refinement'
+    icon: Anchor,
+    title: 'Mobile Boat Detailing',
+    description: 'One-step & two-step boat detailing at your marina, dock, or storage'
   },
   {
     icon: Disc,
-    title: 'Paint Correction & Polishing',
-    description: 'Multi-stage correction for deep gloss'
+    title: 'Boat Polishing',
+    description: 'Professional compound & polish to restore deep gloss and clarity'
   },
   {
-    icon: Shield,
-    title: 'Ceramic Coating Application',
-    description: 'Durable protection, hydrophobic effect'
+    icon: Sparkles,
+    title: 'Oxidation Removal',
+    description: 'Marine oxidation removal and gelcoat surface restoration'
   },
   {
     icon: Wind,
-    title: 'Swirl Marks & Road Rash Fix',
-    description: 'Remove swirls, scuffs, light rash'
+    title: 'Gelcoat Restoration',
+    description: 'Revive faded and chalky marine gelcoat to like-new condition'
+  },
+  {
+    icon: Shield,
+    title: 'Ceramic Coating',
+    description: 'Long-lasting ceramic protection for boats, RVs, and vehicles'
   },
   {
     icon: Droplet,
-    title: 'Touch-Up Paint',
-    description: 'Spot repair to protect exposed areas'
-  },
-  {
-    icon: Lightbulb,
-    title: 'Headlight Restoration',
-    description: 'Clarity restored, UV-sealed'
+    title: 'RV & Car Polishing',
+    description: 'Paint correction and swirl removal for RVs, cars, and aircraft'
   }
 ];
 
@@ -40,10 +40,10 @@ export default function Services() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Serving Myrtle Beach & Surrounding Areas
+              Mobile Marine Detailing – Myrtle Beach & Coastal SC
             </h2>
             <p className="text-xl text-gray-400">
-              Professional mobile paint restoration at your location
+              We come to your marina, dock, storage facility, or home
             </p>
           </div>
 
@@ -71,7 +71,7 @@ export default function Services() {
 
           <div className="text-center">
             <p className="text-xl text-gray-300 font-medium">
-              Full Vehicle, Boat & RV Polishing
+              Boats · RVs · Cars · Aircraft — Mobile Service Comes to You
             </p>
           </div>
         </div>

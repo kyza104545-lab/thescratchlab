@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://thescratchlab.netlify.app/</loc>
-    <lastmod>2025-11-13</lastmod>
+    <loc>https://thescratchlab.org/</loc>
+    <lastmod>2026-04-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://thescratchlab.netlify.app/og-v2.jpg</image:loc>
-      <image:caption>Mobile paint correction & scratch removal</image:caption>
+      <image:loc>https://thescratchlab.org/og-scratchlab.png</image:loc>
+      <image:caption>Mobile boat detailing, boat polishing &amp; oxidation removal – Myrtle Beach, SC</image:caption>
     </image:image>
   </url>
 </urlset>

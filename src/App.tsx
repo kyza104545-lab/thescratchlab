@@ -7,6 +7,7 @@ import Appointment from './components/Appointment';
 import Gallery from './components/Gallery';
 import Process from './components/Process';
 import WhyUs from './components/WhyUs';
+import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import MobileCallButton from './components/MobileCallButton';
@@ -24,6 +25,7 @@ function App() {
       <WhyUs />
       <Appointment />
       <Reviews />
+      <FAQ />
       <Contact />
       <Footer />
       <MobileCallButton />

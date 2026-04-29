@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://thescratchlab.netlify.app/sitemap.xml
+Sitemap: https://thescratchlab.org/sitemap.xml
